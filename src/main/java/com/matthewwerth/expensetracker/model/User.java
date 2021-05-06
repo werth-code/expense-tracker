@@ -20,7 +20,7 @@ public class User {
     private String name;
     private String email;
 
-    @OneToMany  // this is how we connect to our categories. One user, many categories.
-    private Set<Category> category;
+//    @OneToMany  // this is how we connect to our categories. One user, many categories.
+//    private Set<Category> category;
 
 }

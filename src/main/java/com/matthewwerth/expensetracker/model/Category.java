@@ -17,8 +17,4 @@ public class Category {
     // categories like travel, phone bill, internet
     private String name;
 
-    @ManyToOne(cascade = CascadeType.PERSIST) //
-    // many categories connected to one user
-    private User user;
-
 }
