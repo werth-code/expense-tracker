@@ -2,6 +2,7 @@ package com.matthewwerth.expensetracker.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.*;
 
@@ -15,6 +16,7 @@ public class Category {
     private Long id;
 
     // categories like travel, phone bill, internet
+    @NonNull
     private String name;
 
 }
