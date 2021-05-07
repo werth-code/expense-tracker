@@ -11,6 +11,7 @@ export default class Category extends Component {
     async componentDidMount() {
         const response = await fetch('/api/categories')
         const body = await response.json()
+        
         this.setState({ Categories : body, isLoading : false }) //set the state to the response and isLoading to false
     }
 
