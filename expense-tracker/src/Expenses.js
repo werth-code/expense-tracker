@@ -32,7 +32,7 @@ export default class Expenses extends Component {
         let categoryOptions = Categories.map(category => <option id={category.id}>{category.name}</option>)
 
         return (
-            <div>
+            <div id="expense-form">
                 <Container>
                     {title}
                     <Form>
@@ -46,7 +46,7 @@ export default class Expenses extends Component {
                                 <select>
                                     {categoryOptions}
                                 </select>
-                            <input type="text" name="category" id="category" onChange={this.handleChange}/>
+                            {/* <input type="text" name="category" id="category" onChange={this.handleChange}/> */}
                         </FormGroup>
 
                         <FormGroup>
