@@ -6,19 +6,46 @@ import { FormGroup, Container, Form, Button } from 'reactstrap'
 import { Link } from "react-router-dom"
 export default class Expenses extends Component {
 
-    state = { 
-        date : new Date(),
-        isLoading : true,
-        expenses : [],
-        Categories : []
+    //     {
+    //     "id": 102,
+    //     "expenseDate": "2021-06-13T17:00:00Z",
+    //     "description": "Client Drinks",
+    //     "amount": 5.99,
+    //     "category": {
+    //         "id": 3,
+    //         "name": "Internet"
+    //     }
+    // } @GeneratedValue in Spring
+
+    emptyItem = { // template for post req
+        id: '103',
+        expenseDate : new Date(),
+        description : "",
+        amount : 10.00,
+        category : [3, "Internet"]
     }
+
+    constructor(props) {
+        super(props)
+        this.state = { 
+            date : new Date(),
+            isLoading : true,
+            Expenses : [],
+            Categories : [],
+            item : this.emptyItem // saving the data into our state
+        }
+    }
+
 
     //async function to get our api data
     async componentDidMount() {
         const response = await fetch('/api/categories')
         const body = await response.json();
-
         this.setState( { Categories : body, isLoading : false } )
+
+        const responseExpense = await fetch('/api/expenses')
+        const bodyExpense = await responseExpense.json();
+        this.setState( { Expenses : bodyExpense, isLoading : false } )
     }
 
     render() {
@@ -28,7 +55,6 @@ export default class Expenses extends Component {
 
         if(isLoading) return <div>Loading...</div> // until the api call completes..
 
-
         let categoryOptions = Categories.map(category => <option id={category.id}>{category.name}</option>)
 
         return (
@@ -37,7 +63,7 @@ export default class Expenses extends Component {
                     {title}
                     <Form>
                         <FormGroup>
-                            <label for="title">Title</label>
+                            <label for="title">Description</label>
                             <input type="text" name="title" id="title" onChange={this.handleChange}/>
                         </FormGroup>
 
@@ -55,8 +81,8 @@ export default class Expenses extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                            <label for="location">Location</label>
-                            <input type="text" name="location" id="location" onChange={this.handleChange}/>
+                            <label for="amount">Amount</label>
+                            <input type="number" min="0" max="10000" step="any" name="amount" id="location" onChange={this.handleChange}/>
                         </FormGroup>
 
                         <FormGroup>
