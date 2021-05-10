@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import DatePicker from "react-datepicker"
 import "./App.css"
 import "react-datepicker/dist/react-datepicker.css"
-import { FormGroup, Container, Form, Button, Table} from 'reactstrap'
+import { FormGroup, Container, Form, Button, Table, Input, Label} from 'reactstrap'
 import { Link } from "react-router-dom"
 export default class Expenses extends Component {
 
@@ -117,39 +117,40 @@ export default class Expenses extends Component {
 
         return (
             <div >
-                <Container id="expense-form">
+                <Container id="main-cont">
                     {title}
-                    <Form onSubmit={this.handleSubmit}>
+                    <Form id="expense-form" onSubmit={this.handleSubmit}>
                         <FormGroup>
-                            <label htmlFor="description">Description</label>
-                            <input type="text" name="description" id="description" onChange={this.handleChange}/>
+                            <Label htmlFor="description" placeholder="Memory Card">Description</Label>
+                            <Input type="text" name="description" id="description" onChange={this.handleChange}/>
                         </FormGroup>
 
                         <FormGroup>
-                            <label htmlFor="category">Category</label>
-                                <select>
+                            <Label htmlFor="category">Category</Label>
+                                <Input type="select">
                                     {categoryOptions}
-                                </select>
-                            {/* <input type="text" name="category" id="category" onChange={this.handleChange}/> */}
-                        </FormGroup>
-
-                        <FormGroup>
-                            <label htmlFor="expenseDate">Expense Date</label>
-                            <DatePicker selected={this.state.item.expenseDate} onChange={this.handleDateChange}/>                        
+                                </Input>
                         </FormGroup>
 
                          <FormGroup>  { /* Check For Errors Here If No Submit */ }
-                            <label htmlFor="amount">Amount</label>
-                            <input type="number" min="0" max="10000" step="any" name="amount" id="location" onChange={this.handleChange}/>
+                            <Label htmlFor="amount">Amount</Label>
+                            <Input type="number" min="0" max="10000" step="any" name="amount" id="location" onChange={this.handleChange}/>
                         </FormGroup>
 
                         <FormGroup>
+                            <br></br>
+                            <Label htmlFor="expenseDate">Expense Date</Label>
+                            <DatePicker selected={this.state.item.expenseDate} onChange={this.handleDateChange}/>                      
+                        </FormGroup>
+
+                        <FormGroup>
+                            <br></br>
                             <Button color="primary" type="submit">Save</Button>{' '}
                             <Button color="secondary" tag={Link} to="/categories">Cancel</Button>
                         </FormGroup>
                     </Form>
                 </Container>
-                {" "}
+                
                 
                 <Container className="expense-container">
                     <h2>Expense List</h2>
