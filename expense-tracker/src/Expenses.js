@@ -110,7 +110,7 @@ export default class Expenses extends Component {
                         <td>{exp.description}</td>
                         <td>{exp.expenseDate.substring(0, 10)}</td>
                         <td>{exp.category.name}</td>
-                        <td>{exp.amount}</td>
+                        <td>{"$" + exp.amount}</td>
                         {/* <td>{exp.id}</td> */}
                         <td><Button size="sm" color="danger" onClick={()=> this.remove(exp.id)}>delete</Button></td>
                     </tr>)
@@ -121,8 +121,8 @@ export default class Expenses extends Component {
                     {title}
                     <Form id="expense-form" onSubmit={this.handleSubmit}>
                         <FormGroup>
-                            <Label htmlFor="description" placeholder="Memory Card">Description</Label>
-                            <Input type="text" name="description" id="description" onChange={this.handleChange}/>
+                            <Label htmlFor="description">Description</Label>
+                            <Input placeholder="Memory Card" type="text" name="description" id="description" onChange={this.handleChange}/>
                         </FormGroup>
 
                         <FormGroup>
@@ -132,9 +132,9 @@ export default class Expenses extends Component {
                                 </Input>
                         </FormGroup>
 
-                         <FormGroup>  { /* Check For Errors Here If No Submit */ }
+                         <FormGroup> 
                             <Label htmlFor="amount">Amount</Label>
-                            <Input type="number" min="0" max="10000" step="any" name="amount" id="location" onChange={this.handleChange}/>
+                            <Input placeholder="$29.99" type="number" min="0" max="10000" step="any" name="amount" id="location" onChange={this.handleChange}/>
                         </FormGroup>
 
                         <FormGroup>
