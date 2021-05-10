@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import DatePicker from "react-datepicker"
 import "./App.css"
 import "react-datepicker/dist/react-datepicker.css"
-import { FormGroup, Container, Form, Button } from 'reactstrap'
+import { FormGroup, Container, Form, Button, Table} from 'reactstrap'
 import { Link } from "react-router-dom"
 export default class Expenses extends Component {
 
@@ -51,15 +51,25 @@ export default class Expenses extends Component {
     render() {
 
         const title = <h1>Add Expense</h1>
-        const { isLoading, Categories } = this.state //just two variables in one line
+        const { Categories } = this.state //just two variables in one line
+        const { Expenses, isLoading } = this.state; 
 
         if(isLoading) return <div>Loading...</div> // until the api call completes..
 
         let categoryOptions = Categories.map(category => <option id={category.id}>{category.name}</option>)
 
+        let rows = Expenses.map(exp => 
+                    <tr>
+                        <td>{exp.description}</td>
+                        <td>{exp.date}</td>
+                        <td>{exp.category.name}</td>
+                        <td>{exp.amount}</td>
+                        <td><Button size="sm" color="danger" onClick={()=> this.remove(exp.id)}>delete</Button></td>
+                    </tr>)
+
         return (
-            <div id="expense-form">
-                <Container>
+            <div >
+                <Container id="expense-form">
                     {title}
                     <Form>
                         <FormGroup>
@@ -91,7 +101,28 @@ export default class Expenses extends Component {
                         </FormGroup>
                     </Form>
                 </Container>
-            </div>
+                {" "}
+                
+                <Container className="expense-container">
+                    <h2>Expense List</h2>
+                    <Table className="mt-4">
+                        <thead>
+                            <tr>
+                                <th width="40%">Description</th>
+                                <th width="15%">Date</th>
+                                <th width="15%">Categories</th>
+                                <th width="15%">Amount</th>
+                                <th width=""></th>
+                            </tr>
+                        </thead>
+                        <tbody>  
+                            {rows}
+                        </tbody>
+
+                    </Table>
+                </Container>
+                </div>
+            
         )
     }
 }
