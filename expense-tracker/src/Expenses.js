@@ -36,6 +36,21 @@ export default class Expenses extends Component {
         }
     }
 
+    //async remove method - delete call to api
+
+    async remove(id) {
+        await fetch(`/api/expenses/${id}`, {
+            method : "DELETE",
+            headers : {
+                "Accept" : 'application/json',
+                "Content-Type" : "application/json"
+            }
+        }).then( () => {
+            let updatedExpenses = [ ...this.state.Expenses ].filter( ele => ele.id !== id)
+            this.setState( { Expenses : updatedExpenses })
+        })
+    }
+
 
     //async function to get our api data
     async componentDidMount() {
@@ -61,9 +76,10 @@ export default class Expenses extends Component {
         let rows = Expenses.map(exp => 
                     <tr>
                         <td>{exp.description}</td>
-                        <td>{exp.date}</td>
+                        <td>{exp.expenseDate.substring(0, 10)}</td>
                         <td>{exp.category.name}</td>
                         <td>{exp.amount}</td>
+                        {/* <td>{exp.id}</td> */}
                         <td><Button size="sm" color="danger" onClick={()=> this.remove(exp.id)}>delete</Button></td>
                     </tr>)
 
@@ -108,10 +124,10 @@ export default class Expenses extends Component {
                     <Table className="mt-4">
                         <thead>
                             <tr>
-                                <th width="40%">Description</th>
-                                <th width="15%">Date</th>
-                                <th width="15%">Categories</th>
-                                <th width="15%">Amount</th>
+                                <th width="30%">Description</th>
+                                <th width="30%">Date</th>
+                                <th width="20%">Categories</th>
+                                <th width="20%">Amount</th>
                                 <th width=""></th>
                             </tr>
                         </thead>

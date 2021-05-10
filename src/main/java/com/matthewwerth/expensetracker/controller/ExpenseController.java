@@ -30,11 +30,11 @@ public class ExpenseController {
         return ResponseEntity.created(new URI("/api/expenses" + result.getId())).body(result);
     }
 
-    @PutMapping("/expenses/{id}")
-    ResponseEntity<Expense> updateExpense(@Validated @RequestBody Expense expense) {
-        Expense result = expenseRepository.save(expense);
-        return ResponseEntity.ok().body(result);
-    }
+//    @PutMapping("/expenses/{id}")
+//    ResponseEntity<Expense> updateExpense(@Validated @RequestBody Expense expense) {
+//        Expense result = expenseRepository.save(expense);
+//        return ResponseEntity.ok().body(result);
+//    }
 
     // PUT NOT WORKING YET
 //    @PutMapping("/category/{id}")
