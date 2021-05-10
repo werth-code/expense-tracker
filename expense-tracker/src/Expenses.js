@@ -6,6 +6,7 @@ import { FormGroup, Container, Form, Button, Table} from 'reactstrap'
 import { Link } from "react-router-dom"
 export default class Expenses extends Component {
 
+    // @GeneratedValue in Spring for auto gen ids?
     //     {
     //     "id": 102,
     //     "expenseDate": "2021-06-13T17:00:00Z",
@@ -15,14 +16,14 @@ export default class Expenses extends Component {
     //         "id": 3,
     //         "name": "Internet"
     //     }
-    // } @GeneratedValue in Spring
+    // } 
 
     emptyItem = { // template for post req
-        id: '103',
-        expenseDate : new Date(),
         description : "",
+        id: '103', // need to generate values here to keep adding...
+        expenseDate : new Date(),
         amount : 10.00,
-        category : [3, "Internet"]
+        category : { id: 3, name : "Internet" }
     }
 
     constructor(props) {
@@ -34,17 +35,49 @@ export default class Expenses extends Component {
             Categories : [],
             item : this.emptyItem // saving the data into our state
         }
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.handleDateChange = this.handleDateChange.bind(this)
+    }
+
+    async handleSubmit(event) {
+        
+        const item = this.state.item;
+        await fetch(`/api/expenses`, {
+            method : "POST",
+            headers : {
+                "Accept" : 'application/json',
+                "Content-Type" : "application/json"
+            },
+            body : JSON.stringify( item ) // converts to JSON obj
+        })
+        event.preventDefault(); //keep form from auto submitting
+        this.props.history.push("/expenses")
+    }
+
+    handleChange(event) {
+        const target = event.target
+        const value = target.value
+        const name = target.name // gets us the value of our form
+        let item = { ...this.state.item }
+        item[name] = value
+        this.setState( { item } )
+    }
+
+    handleDateChange(date) {
+        let item = { ...this.state.item }
+        item.expenseDate = date // update the expenseDate with our form value for date
+        this.setState( { item } )
     }
 
     //async remove method - delete call to api
-
     async remove(id) {
         await fetch(`/api/expenses/${id}`, {
             method : "DELETE",
             headers : {
                 "Accept" : 'application/json',
                 "Content-Type" : "application/json"
-            }
+            } // be careful with all of the ({ here }) caused errors when out of order and hard to catch!
         }).then( () => {
             let updatedExpenses = [ ...this.state.Expenses ].filter( ele => ele.id !== id)
             this.setState( { Expenses : updatedExpenses })
@@ -64,17 +97,16 @@ export default class Expenses extends Component {
     }
 
     render() {
-
         const title = <h1>Add Expense</h1>
         const { Categories } = this.state //just two variables in one line
         const { Expenses, isLoading } = this.state; 
 
         if(isLoading) return <div>Loading...</div> // until the api call completes..
 
-        let categoryOptions = Categories.map(category => <option id={category.id}>{category.name}</option>)
+        let categoryOptions = Categories.map(category => <option key={category.id} id={category.id}>{category.name}</option>)
 
         let rows = Expenses.map(exp => 
-                    <tr>
+                    <tr key={exp.id}>
                         <td>{exp.description}</td>
                         <td>{exp.expenseDate.substring(0, 10)}</td>
                         <td>{exp.category.name}</td>
@@ -87,14 +119,14 @@ export default class Expenses extends Component {
             <div >
                 <Container id="expense-form">
                     {title}
-                    <Form>
+                    <Form onSubmit={this.handleSubmit}>
                         <FormGroup>
-                            <label for="title">Description</label>
-                            <input type="text" name="title" id="title" onChange={this.handleChange}/>
+                            <label htmlFor="description">Description</label>
+                            <input type="text" name="description" id="description" onChange={this.handleChange}/>
                         </FormGroup>
 
                         <FormGroup>
-                            <label for="category">Category</label>
+                            <label htmlFor="category">Category</label>
                                 <select>
                                     {categoryOptions}
                                 </select>
@@ -102,12 +134,12 @@ export default class Expenses extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                            <label for="expenseDate">Expense Date</label>
-                            <DatePicker selected={this.state.date} onChange={this.handleChange}/>                        
+                            <label htmlFor="expenseDate">Expense Date</label>
+                            <DatePicker selected={this.state.item.expenseDate} onChange={this.handleDateChange}/>                        
                         </FormGroup>
 
-                        <FormGroup>
-                            <label for="amount">Amount</label>
+                         <FormGroup>  { /* Check For Errors Here If No Submit */ }
+                            <label htmlFor="amount">Amount</label>
                             <input type="number" min="0" max="10000" step="any" name="amount" id="location" onChange={this.handleChange}/>
                         </FormGroup>
 
